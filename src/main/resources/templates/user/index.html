@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FileShare | Seu espaço para compartilhamento</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #6c5ce7;
+            --secondary-color: #a29bfe;
+            --dark-color: #2d3436;
+            --light-color: #f5f6fa;
+            --accent-color: #fd79a8;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light-color);
+            color: var(--dark-color);
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .card-hover {
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .btn-accent {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            color: white;
+        }
+
+        .btn-accent:hover {
+            background-color: #e84393;
+            border-color: #e84393;
+        }
+
+        .drag-drop-area {
+            border: 3px dashed var(--secondary-color);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .drag-drop-area:hover {
+            background-color: rgba(162, 155, 254, 0.1);
+        }
+
+        .file-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+        }
+
+        .progress-bar-custom {
+            height: 10px;
+            border-radius: 5px;
+            background-color: #dfe6e9;
+        }
+
+        .progress-bar-custom .progress-bar {
+            background-color: var(--primary-color);
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark gradient-bg shadow-sm">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="/static">
+            <i class="fas fa-cloud-upload-alt me-2"></i>FileShare
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/static">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/my-files">Meus Arquivos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/about">Sobre</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/contact">Contato</a>
+                </li>
+                <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
+<!--                    <a th:if="${#authentication.principal == 'anonymousUser'}"-->
+<!--                       href="/login" class="btn btn-light">Login</a>-->
+<!--                    <a th:unless="${#authentication.principal == 'anonymousUser'}"-->
+<!--                       href="/logout" class="btn btn-light">Logout</a>-->
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<main class="container my-5">
+    <!-- Upload Section -->
+    <section class="mb-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card card-hover shadow">
+                    <div class="card-body p-4">
+
+                        <form th:action="@{/v1/file/upload}" method="post" enctype="multipart/form-data" class="mb-5" th:object="${archive}">
+                            <div class="drag-drop-area mb-4">
+                                <i class="fas fa-file-upload file-icon mb-3"></i>
+                                <h5>Selecione seus arquivos</h5>
+                                <input type="file" name="file" class="form-control mt-3" required>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3 mb-md-0">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="fileName" name="fileName" placeholder="Nome do arquivo (opcional)" th:field="*{name}">
+                                        <label for="fileName">Nome do arquivo (opcional)</label>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="d-grid mt-4">
+                                <button type="submit" class="btn btn-accent btn-lg">
+                                    <i class="fas fa-upload me-2"></i>Iniciar Upload
+                                </button>
+                            </div>
+                        </form>
+
+                        <!--                        <h2 class="card-title text-center mb-4">-->
+<!--                            <i class="fas fa-cloud-upload-alt me-2"></i>Envie seus arquivos-->
+<!--                        </h2>-->
+
+<!--                        <div id="dragDropArea" class="drag-drop-area mb-4">-->
+<!--                            <i class="fas fa-file-upload file-icon mb-3"></i>-->
+<!--                            <h5>Arraste e solte seus arquivos aqui</h5>-->
+<!--                            <p class="text-muted">ou</p>-->
+<!--                            <button id="browseBtn" class="btn btn-primary px-4">Selecione os arquivos</button>-->
+<!--                            <input type="file" id="fileInput" multiple style="display: none;">-->
+<!--                        </div>-->
+
+<!--                        <div id="uploadProgress" class="d-none">-->
+<!--                            <div class="d-flex justify-content-between mb-2">-->
+<!--                                <span>Enviando...</span>-->
+<!--                                <span id="progressPercent">0%</span>-->
+<!--                            </div>-->
+<!--                            <div class="progress progress-bar-custom mb-3">-->
+<!--                                <div id="progressBar" class="progress-bar" role="progressbar" style="width: 0%"></div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+
+<!--                        <div class="row">-->
+<!--                            <div class="col-md-6 mb-3 mb-md-0">-->
+<!--                                <div class="form-floating">-->
+<!--                                    <input type="text" class="form-control" id="fileName" placeholder="Nome do arquivo">-->
+<!--                                    <label for="fileName">Nome do arquivo (opcional)</label>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="col-md-6">-->
+<!--                                <div class="form-floating">-->
+<!--                                    <input type="password" class="form-control" id="filePassword" placeholder="Senha">-->
+<!--                                    <label for="filePassword">Senha (opcional)</label>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+
+<!--                        <div class="d-grid mt-4">-->
+<!--                            <button id="uploadBtn" class="btn btn-accent btn-lg" disabled>-->
+<!--                                <i class="fas fa-upload me-2"></i>Iniciar Upload-->
+<!--                            </button>-->
+<!--                        </div>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recent Files Section -->
+    <section>
+        <h3 class="mb-4 text-center">
+            <i class="fas fa-history me-2"></i>Arquivos Recentes
+        </h3>
+
+
+
+        <div class="row" th:if="${not #lists.isEmpty(recentFiles)}">
+            <div class="col-md-6 col-lg-4 mb-4" th:each="file : ${recentFiles}">
+                <div class="card card-hover h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-start mb-3">
+                            <i class="fas fa-file-alt fa-3x me-3"
+                               th:classappend="${#strings.startsWith(file.type, 'image/')} ? 'fa-file-image' :
+                                                  ${#strings.startsWith(file.type, 'video/')} ? 'fa-file-video' :
+                                                  ${#strings.startsWith(file.type, 'audio/')} ? 'fa-file-audio' :
+                                                  ${#strings.startsWith(file.type, 'application/pdf')} ? 'fa-file-pdf' :
+                                                  ${#strings.startsWith(file.type, 'application/zip')} ? 'fa-file-archive' : 'fa-file-alt'"></i>
+                            <div>
+                                <h5 class="card-title mb-1" th:text="${file.name}">Nome do Arquivo</h5>
+                                <small class="text-muted" th:text="${#temporals.format(file.uploadDate, 'dd/MM/yyyy HH:mm')}">Data</small>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="badge bg-secondary" th:text="${file.size + ' MB'}">10 MB</span>
+                            <a th:href="@{'/download/' + ${file.id}}" class="btn btn-sm btn-primary">
+                                <i class="fas fa-download me-1"></i>Download
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center py-5" th:if="${#lists.isEmpty(recentFiles)}">
+            <i class="fas fa-folder-open fa-4x mb-3 text-muted"></i>
+            <h4>Nenhum arquivo recente</h4>
+            <p class="text-muted">Faça upload de arquivos para vê-los aqui</p>
+        </div>
+    </section>
+</main>
+
+<!-- Footer -->
+<footer class="gradient-bg text-white py-4 mt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 mb-4 mb-md-0">
+                <h5><i class="fas fa-cloud-upload-alt me-2"></i>FileShare</h5>
+                <p class="mb-0">Sua solução simples para compartilhamento de arquivos.</p>
+            </div>
+            <div class="col-md-4 mb-4 mb-md-0">
+                <h5>Links Rápidos</h5>
+                <ul class="list-unstyled">
+                    <li><a href="/static" class="text-white">Home</a></li>
+                    <li><a href="/my-files" class="text-white">Meus Arquivos</a></li>
+                    <li><a href="/privacy" class="text-white">Política de Privacidade</a></li>
+                    <li><a href="/terms" class="text-white">Termos de Serviço</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h5>Contato</h5>
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-envelope me-2"></i>contato@fileshare.com</li>
+                    <li><i class="fas fa-phone me-2"></i>(00) 1234-5678</li>
+                </ul>
+            </div>
+        </div>
+        <hr class="my-4 bg-light">
+        <div class="text-center">
+            <p class="mb-0">&copy; 2023 FileShare. Todos os direitos reservados.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // JavaScript para manipulação do upload
+    document.addEventListener('DOMContentLoaded', function() {
+        const dragDropArea = document.getElementById('dragDropArea');
+        const fileInput = document.getElementById('fileInput');
+        const browseBtn = document.getElementById('browseBtn');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const uploadProgress = document.getElementById('uploadProgress');
+        const progressBar = document.getElementById('progressBar');
+        const progressPercent = document.getElementById('progressPercent');
+
+        let filesToUpload = [];
+
+        // Manipulação do drag and drop
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dragDropArea.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dragDropArea.addEventListener(eventName, highlight, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dragDropArea.addEventListener(eventName, unhighlight, false);
+        });
+
+        function highlight() {
+            dragDropArea.classList.add('bg-primary', 'bg-opacity-10');
+        }
+
+        function unhighlight() {
+            dragDropArea.classList.remove('bg-primary', 'bg-opacity-10');
+        }
+
+        dragDropArea.addEventListener('drop', handleDrop, false);
+
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            handleFiles(files);
+        }
+
+        browseBtn.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', () => {
+            handleFiles(fileInput.files);
+        });
+
+        function handleFiles(files) {
+            filesToUpload = [...files];
+            if (filesToUpload.length > 0) {
+                uploadBtn.disabled = false;
+                dragDropArea.innerHTML = `
+                        <i class="fas fa-check-circle file-icon text-success mb-3"></i>
+                        <h5>${filesToUpload.length} arquivo(s) selecionado(s)</h5>
+                        <p class="text-muted small">${Array.from(filesToUpload).map(f => f.name).join(', ')}</p>
+                        <button class="btn btn-outline-secondary btn-sm mt-2">Alterar arquivos</button>
+                    `;
+            }
+        }
+
+        uploadBtn.addEventListener('click', uploadFiles);
+
+        function uploadFiles() {
+            if (filesToUpload.length === 0) return;
+
+            uploadProgress.classList.remove('d-none');
+            uploadBtn.disabled = true;
+
+            // Simulação de upload (substituir por chamada AJAX real)
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 10;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                    uploadBtn.innerHTML = '<i class="fas fa-check me-2"></i>Upload Concluído';
+                    setTimeout(() => {
+                        uploadProgress.classList.add('d-none');
+                        uploadBtn.disabled = false;
+                        uploadBtn.innerHTML = '<i class="fas fa-upload me-2"></i>Iniciar Upload';
+                        dragDropArea.innerHTML = `
+                                <i class="fas fa-file-upload file-icon mb-3"></i>
+                                <h5>Arraste e solte seus arquivos aqui</h5>
+                                <p class="text-muted">ou</p>
+                                <button id="browseBtn" class="btn btn-primary px-4">Selecione os arquivos</button>
+                            `;
+                        filesToUpload = [];
+                        // Recarregar a lista de arquivos recentes
+                        location.reload();
+                    }, 2000);
+                }
+                progressBar.style.width = `${progress}%`;
+                progressPercent.textContent = `${Math.round(progress)}%`;
+            }, 300);
+        }
+    });
+</script>
+</body>
+</html>
