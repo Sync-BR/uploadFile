@@ -15,7 +15,6 @@ public class UrlMapper {
         );
 
     }
-
     public UrlDto convertToDto(UrlEntity entity) {
         return new UrlDto(
                 entity.getUrl(),

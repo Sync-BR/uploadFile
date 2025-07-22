@@ -18,7 +18,7 @@ public class ArchiveEntity {
     private long size;
 
     @ManyToOne()
-    @JoinColumn(name = "folder_id", referencedColumnName = "id")
+    @JoinColumn(name = "folder_identifier", referencedColumnName = "identifier")
     private FolderEntity folder;
 
     @OneToOne(cascade = CascadeType.ALL)

@@ -9,5 +9,7 @@ public interface ClientRepository extends JpaRepository<ClientEntity, Integer> {
 
     ClientEntity findByEmailAndUser_Password(String email, String password);
 
+    ClientEntity findByFolder_Identifier(String folder_Identifier);
+
 
 }

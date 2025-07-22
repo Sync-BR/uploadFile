@@ -14,7 +14,6 @@ public class ArchiveMapper {
     private final UrlMapper urlMapper;
 
 
-
     public ArchiveMapper(@Lazy FolderMapper folderMapper, UrlMapper urlMapper) {
         this.folderMapper = folderMapper;
         this.urlMapper = urlMapper;
@@ -37,7 +36,7 @@ public class ArchiveMapper {
 
     public List<ArchiveEntity> convertListToEntity(List<ArchivesDto> clientArchives) {
         ArrayList<ArchiveEntity> archiveEntities = new ArrayList<>();
-        for(ArchivesDto archivesDto : clientArchives){
+        for (ArchivesDto archivesDto : clientArchives) {
             ArchiveEntity archiveEntity = new ArchiveEntity(
                     archivesDto.getName(),
                     archivesDto.getPath(),
@@ -49,6 +48,7 @@ public class ArchiveMapper {
         }
         return archiveEntities;
     }
+
     public ArchiveEntity convertToEntity(ArchivesDto dto) {
         return new ArchiveEntity(
                 dto.getName(),
@@ -57,6 +57,16 @@ public class ArchiveMapper {
                 folderMapper.convertToEntity(dto.getFolder()),
                 urlMapper.convertToEntity(dto.getUrl())
         );
+    }
+
+    public ArchivesDto convertToDto(ArchiveEntity entity) {
+        return new ArchivesDto(
+                entity.getArchiveName(),
+                entity.getArchivePath(),
+                entity.getSize(),
+                folderMapper.convertToDto(entity.getFolder()),
+                urlMapper.convertToDto(entity.getUrl())
+                );
     }
 
 }

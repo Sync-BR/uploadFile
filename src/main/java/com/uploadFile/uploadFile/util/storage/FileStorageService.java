@@ -1,9 +1,7 @@
 package com.uploadFile.uploadFile.util.storage;
 
 import com.uploadFile.uploadFile.model.dto.ArchivesDto;
-import com.uploadFile.uploadFile.model.entity.ArchiveEntity;
-import com.uploadFile.uploadFile.model.entity.FolderEntity;
-import org.apache.tomcat.jni.FileInfo;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,7 +10,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 
 @Service
 public class FileStorageService {

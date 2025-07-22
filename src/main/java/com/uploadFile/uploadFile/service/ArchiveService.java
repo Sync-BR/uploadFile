@@ -25,21 +25,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 public class ArchiveService implements ServiceInterface<ArchivesDto> {
     private final FileStorageService storageService;
-
     private final FolderService folderService;
-
-    private final FolderMapper mapper;
     private final ArchiveMapper archiveMapper;
-
-    private ClientSession session;
-
+    private final ClientSession session;
     private final ArchiveRepository repository;
 
 
-    public ArchiveService(FileStorageService storageService, FolderService folderService, FolderMapper mapper, ArchiveMapper archiveMapper, ClientSession clientSession, ArchiveRepository repository) {
+    public ArchiveService(FileStorageService storageService, FolderService folderService,  ArchiveMapper archiveMapper, ClientSession clientSession, ArchiveRepository repository) {
         this.storageService = storageService;
         this.folderService = folderService;
-        this.mapper = mapper;
         this.archiveMapper = archiveMapper;
         this.session = clientSession;
         this.repository = repository;
@@ -47,34 +41,16 @@ public class ArchiveService implements ServiceInterface<ArchivesDto> {
 
     public void saveFile(MultipartFile file) throws IOException {
         ArchivesDto archive = storageService.storeFile(session.getSession().getFolder().getIdentifier(), file);
-        System.out.println("Log archive " +archive);
-
-
-//        System.out.println("Testing folder " + folder);
-
-//        System.out.println("Testing ");
-//        archive.setFolder(folder);
-//        System.out.println("Testing ");
-//
-        //     archive.setFolder(mapper.convertToDto(folderService.searchFolderClient(session.getSession().getFolder().getIdentifier())));
-//
-//        List<ArchivesDto> archiveDtos = new ArrayList<>();
-//        archiveDtos.add(archive);
-//        archive.getFolder().setClientArchives(archiveDtos);
-//
         archive.setUrl(new UrlDto(archive.getName(), FileVisibility.PUBLIC));
         save(archive);
     }
 
     @Override
     public void save(ArchivesDto dto) {
-        System.out.println("Testing dto " +dto );
         ArchiveEntity entity = archiveMapper.convertToEntity(dto);
         FolderEntity folderEntity = folderService.searchFolderClient(session.getSession().getFolder().getIdentifier());
-        System.out.println("testing folder" + folderEntity);
         entity.setFolder(folderEntity);
 
-        System.out.println("Ultimo teste: " + entity);
         repository.save(entity);
     }
 

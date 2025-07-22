@@ -2,16 +2,13 @@ package com.uploadFile.uploadFile.model.dto;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 @Getter
 @Setter
-@ToString
 public class ArchivesDto {
     private String name;
     private String path;
     private long size;
-    @ToString.Exclude
     private FolderDto folder;
     private UrlDto url;
 

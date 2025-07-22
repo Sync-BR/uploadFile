@@ -5,8 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity(name = "FOLDER")
 @Getter
@@ -18,19 +16,11 @@ public class FolderEntity {
     private long id;
     private String identifier;
 
-//    @OneToMany(mappedBy = "folder", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<ArchiveEntity> archives = new ArrayList<>();
-
-
     public FolderEntity() {
     }
 
     public FolderEntity(String identifier) {
         this.identifier = identifier;
     }
-//
-//    public FolderEntity(String identifier, List<ArchiveEntity> archives) {
-//        this.identifier = identifier;
-//        this.archives = archives;
-//    }
+
 }

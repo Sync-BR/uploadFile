@@ -7,11 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class FolderMapper {
-    private final ArchiveMapper archiveMapper;
 
-    public FolderMapper(ArchiveMapper archiveMapper) {
-        this.archiveMapper = archiveMapper;
-    }
 
     public FolderEntity convertToEntity(FolderDto dto) {
         if (dto == null) {
@@ -20,16 +16,11 @@ public class FolderMapper {
         return new FolderEntity(dto.getFolderIdentifier());
     }
 
-//    public FolderDto convertToDto(FolderEntity entity) {
-//        return new FolderDto(
-//                entity.getIdentifier(),
-//                archiveMapper.convertListToDto(entity.getArchives())
-//        );
-//    }
-public FolderDto convertToDto(FolderEntity entity) {
-    return new FolderDto(
-            entity.getIdentifier()
-    );
-}
+
+    public FolderDto convertToDto(FolderEntity entity) {
+        return new FolderDto(
+                entity.getIdentifier()
+        );
+    }
 
 }
