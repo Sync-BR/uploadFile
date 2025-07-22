@@ -6,11 +6,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 
 @Entity(name = "USER")
 @Getter
 @Setter
+@ToString
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

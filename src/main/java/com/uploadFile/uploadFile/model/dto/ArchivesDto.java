@@ -22,4 +22,10 @@ public class ArchivesDto {
         this.folder = folder;
         this.url = url;
     }
+
+    public static void main(String[] args) {
+        ArchivesDto dto = new ArchivesDto();
+        dto.setName("test");
+        System.out.println(dto.getName());
+    }
 }

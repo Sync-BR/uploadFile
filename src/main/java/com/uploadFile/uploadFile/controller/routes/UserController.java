@@ -7,9 +7,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class UserController {
+
     @GetMapping("/home")
-    public String index(Model model){
+    public String index( Model model) {
+
         model.addAttribute("archive", new ArchivesDto());
         return "/user/index";
+    }
+
+    @GetMapping("/manage/archives/")
+    public String manage(Model model) {
+        return "/user/manage";
     }
 }

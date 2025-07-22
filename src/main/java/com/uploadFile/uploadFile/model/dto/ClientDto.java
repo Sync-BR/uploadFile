@@ -16,6 +16,12 @@ public class ClientDto {
     public ClientDto() {
     }
 
+    public ClientDto(String clientName, String clientEmail, String clientPhone) {
+        this.clientName = clientName;
+        this.clientEmail = clientEmail;
+        this.clientPhone = clientPhone;
+    }
+
     public ClientDto(String clientName, String clientEmail, String clientPhone, UserDto clientUser, FolderDto clientFolder) {
         this.clientName = clientName;
         this.clientEmail = clientEmail;

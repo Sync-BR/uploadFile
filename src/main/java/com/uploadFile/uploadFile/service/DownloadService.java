@@ -23,8 +23,9 @@ public class DownloadService {
         return clientRepository.findByFolder_Identifier(identifier).getName();
     }
 
-    public ArchivesDto searchArchives(String identifier, String urlArchive) {
-        ArchiveEntity searchArchive = repository.findByUrl_Url(urlArchive);
+    public ArchivesDto searchArchives(String identifier, String urlArchive)
+    {
+        ArchiveEntity searchArchive = repository.findByFolder_IdentifierAndUrl_Url(identifier,urlArchive);
         return mapper.convertToDto(searchArchive);
     }
 

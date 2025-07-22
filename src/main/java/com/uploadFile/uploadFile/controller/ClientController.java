@@ -1,43 +1,47 @@
 package com.uploadFile.uploadFile.controller;
 
-import com.uploadFile.uploadFile.handle.exception.LoginException;
 import com.uploadFile.uploadFile.handle.exception.ResourceAlreadyExistsException;
 import com.uploadFile.uploadFile.model.dto.ClientDto;
 import com.uploadFile.uploadFile.service.ClientService;
-import com.uploadFile.uploadFile.service.UserService;
+import com.uploadFile.uploadFile.service.UserAuthService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class ClientController {
     private final ClientService service;
-    private final UserService serviceUser;
+    private final UserAuthService userAuthService;
 
-    public ClientController(ClientService service, UserService serviceUser) {
+    public ClientController(ClientService service, UserAuthService userAuthService) {
         this.service = service;
-        this.serviceUser = serviceUser;
+        this.userAuthService = userAuthService;
     }
 
     @PostMapping("/v1/client/register")
-    public String register(@ModelAttribute("client")ClientDto dto){
-        try{
+    public String register(@ModelAttribute("client") ClientDto dto, RedirectAttributes redirectAttributes) {
+        try {
             service.save(dto);
-        } catch (ResourceAlreadyExistsException e){
-            System.out.println(e.getMessage());
+            return "redirect:/registrar?success";
+        } catch (ResourceAlreadyExistsException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/registrar?error";
         }
-        return "redirect:/registrar";
     }
 
     @PostMapping("/v1/client/login")
-    public String login(@ModelAttribute("user") ClientDto dto){
-        try{
-            serviceUser.login(dto);
+    public String login(@ModelAttribute("user") ClientDto dto,
+                        RedirectAttributes redirectAttributes) {
+        try {
+            userAuthService.authenticateUser(dto.getClientEmail(), dto.getClientUser().getPassword());
             return "redirect:/home";
-        } catch (LoginException e){
-            System.out.println(e.getMessage());
+        } catch (UsernameNotFoundException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/login?error";
         }
-        return "login";
     }
+
 
 }

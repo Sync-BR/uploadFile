@@ -29,7 +29,6 @@ public class ClientService implements ServiceInterface<ClientDto> {
     public void save(ClientDto dto) {
         validClient.validate(dto);
         validUser.validate(dto.getClientUser());
-        System.out.println(mapper.convertToEntity(dto));
         repository.save(mapper.convertToEntity(dto));
     }
 

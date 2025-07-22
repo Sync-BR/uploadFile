@@ -1,7 +1,6 @@
 package com.uploadFile.uploadFile.controller.routes;
 
 import com.uploadFile.uploadFile.model.dto.ArchivesDto;
-import com.uploadFile.uploadFile.service.ClientService;
 import com.uploadFile.uploadFile.service.DownloadService;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.FileSystemResource;
@@ -16,11 +15,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.io.File;
 
 @Controller
-public class DownloadController {
+public class ShareController {
 
     private final DownloadService service;
 
-    public DownloadController(DownloadService downloadService){
+    public ShareController(DownloadService downloadService){
         this.service = downloadService;
     }
 
@@ -41,7 +40,7 @@ public class DownloadController {
             @PathVariable String id,
             @PathVariable String url){
         ArchivesDto archive = service.searchArchives(id, url);
-        File file = new File(archive.getPath());
+        File file = new File(archive.getPath(), archive.getName());
         if (!file.exists()) {
             return ResponseEntity.notFound().build();
         }

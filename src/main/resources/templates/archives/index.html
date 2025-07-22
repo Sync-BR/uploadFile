@@ -173,15 +173,15 @@
             <!--                </form>-->
             <!--            </div>-->
 
-            <!-- Direct Download (if no password) -->
-            <!--            <div th:unless="${file.passwordProtected}">-->
-            <!--                <div class="d-grid mb-3">-->
-            <!--                    <a th:href="@{'/download/' + ${file.id}}" class="btn btn-download btn-primary text-white">-->
-            <!--                        <i class="fas fa-file-download me-2"></i>Baixar Arquivo-->
-            <!--                    </a>-->
-            <!--                </div>-->
-            <!--                <p class="text-muted text-center small">Este arquivo será baixado imediatamente</p>-->
-            <!--            </div>-->
+                        <div>
+                            <div class="d-grid mb-3">
+                                <a th:href="@{'/files/download/' + ${file.folder.folderIdentifier} + '/' + ${file.name}}"
+                                   class="btn btn-download btn-primary text-white">
+                                <i class="fas fa-file-download me-2"></i>Baixar Arquivo
+                                </a>
+                            </div>
+                            <p class="text-muted text-center small">Este arquivo será baixado imediatamente</p>
+                       </div>
 
             <!-- Download Progress (hidden by default) -->
             <div id="downloadProgress" class="mt-4 d-none">
